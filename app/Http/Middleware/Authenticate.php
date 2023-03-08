@@ -15,3 +15,26 @@ class Authenticate extends Middleware
         return $request->expectsJson() ? null : route('login');
     }
 }
+
+protected function redirectTo($request)
+{
+    if (! $request->expectsJson()) {
+        return route('login');
+    }
+
+    return response()->json(['error' => 'Unauthorized'], 401);
+}
+
+public function handle($request, Closure $next, ...$roles)
+{
+    if ($request->user() === null) {
+        return $this->redirectTo($request);
+    }
+
+    if (! $request->user()->hasRole($roles)) {
+        return $this->redirectTo($request);
+    }
+
+    return $next($request);
+}
+
