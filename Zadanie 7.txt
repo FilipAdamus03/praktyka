@@ -1,0 +1,9 @@
+PS C:\Users\filip\Desktop\Programowanie\Projekty Git\praktyka> php artisan test
+
+   PASS  Tests\Unit\ExampleTest
+  ✓ that true is true
+
+   PASS  Tests\Feature\ExampleTest
+  ✓ the application returns a successful response                                                                0.13s  
+  Tests:    2 passed (2 assertions)
+  Duration: 0.24s
