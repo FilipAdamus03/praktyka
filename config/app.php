@@ -189,12 +189,14 @@ return [
         /*
          * Application Service Providers...
          */
-        Santigarcor\Laratrust\LaratrustServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         //App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Laratrust\LaratrustServiceProvider::class,
+
+
 
     ],
 
@@ -212,9 +214,6 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
+    
 
-    'providers' => [
-        // ...
-        Santigarcor\Laratrust\LaratrustServiceProvider::class,
-    ],
 ];
