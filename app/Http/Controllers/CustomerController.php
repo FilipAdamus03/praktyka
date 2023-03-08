@@ -61,4 +61,47 @@ class CustomerController extends Controller
     {
         //
     }
+    public function index()
+    {
+    $this->authorize('viewAny', Customer::class);
+
+    $customers = Customer::all();
+
+    return response()->json($customers);
+    }
+
+    public function store(Request $request)
+    { 
+    $this->authorize('create', Customer::class);
+
+    $customer = Customer::create($request->all());
+
+    return response()->json($customer, 201);
+    }
+
+    public function show(Customer $customer)
+    {
+    $this->authorize('view', $customer);
+
+    return response()->json($customer);
+    }
+
+    public function update(Request $request, Customer $customer)
+    {
+    $this->authorize('update', $customer);
+
+    $customer->update($request->all());
+
+    return response()->json($customer);
+    }
+
+    public function destroy(Customer $customer)
+    {
+    $this->authorize('delete', $customer);
+
+    $customer->delete();
+
+    return response()->json(null, 204);
+    }
+
 }
