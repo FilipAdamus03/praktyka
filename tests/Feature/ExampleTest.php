@@ -2,18 +2,32 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
 
-class ExampleTest extends TestCase
+class CustomerAccessTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
+    use RefreshDatabase;
+    
+    public function testUnauthorizedUserCannotAccessCustomerRoutes()
     {
-        $response = $this->get('/');
+        $response = $this->get('/api/customers');
+        $response->assertStatus(401);
+    }
 
+    public function testAuthorizedUserCanAccessCustomerRoutes()
+    {
+        $user = User::factory()->create();
+        $response = $this->actingAs($user, 'api')->get('/api/customers');
         $response->assertStatus(200);
+    }
+
+    public function testUserWithoutAccessToCustomerCannotAccessCustomerRoutes()
+    {
+        $user = User::factory()->create();
+        $response = $this->actingAs($user, 'api')->get('/api/customers');
+        $response->assertStatus(403);
     }
 }
