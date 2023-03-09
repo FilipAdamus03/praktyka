@@ -19,6 +19,4 @@ Route::post('customers', 'CustomerController@store');
 Route::put('customers/{id}', 'CustomerController@update');
 Route::delete('customers/{id}', 'CustomerController@destroy');
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::apiResource('
-    
 });
