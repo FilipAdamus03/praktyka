@@ -9,20 +9,29 @@
   import UserCard from '../components/UserCard.vue'
   
   export default {
-    name: 'Home',
-    components: {
-      UserCard
-    },
-    data() {
-      return {
-        user: {
-          name: 'filip adamus',
-          email: 'filip.adamus@onte.eu',
-          phone: '123456789',
-          address: 'Krakow'
-        }
-      }
+  name: 'Home',
+  components: {
+    UserDetails
+  },
+  data() {
+    return {
+      users: []
     }
+  },
+  methods: {
+    onUserDisplayed() {
+      console.log('Użytkownik wyświetlony i pobrany z serwera');
+    }
+  },
+  mounted() {
+    axios.get('/api/users')
+      .then(response => {
+        this.users = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
-  </script>
+}
+
   

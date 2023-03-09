@@ -12,6 +12,8 @@
   </template>
   
   <script>
+  import { EventEmitter } from 'events';
+  
   export default {
     name: 'UserCard',
     props: {
@@ -19,6 +21,21 @@
         type: Object,
         required: true
       }
+    },
+    methods: {
+      notifyParent() {
+        this.$emit('user-loaded');
+      }
+    },
+    created() {
+      axios.get('/api/users')
+        .then(response => {
+          console.log(response.data);
+          this.notifyParent();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
   </script>
