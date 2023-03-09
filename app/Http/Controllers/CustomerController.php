@@ -1,107 +1,69 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Tests\Feature;
 
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
 
-class CustomerController extends Controller
+class CustomerTest extends TestCase
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    use RefreshDatabase;
+
+    public function test_customer_index_requires_authentication()
     {
-        //
+        $response = $this->get('/api/customers');
+
+        $response->assertStatus(401);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function test_customer_index_allows_authenticated_user()
     {
-        //
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->get('/api/customers');
+
+        $response->assertStatus(200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function test_customer_index_denies_unauthorized_user()
     {
-        //
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/api/customers');
+
+        $response->assertStatus(403);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function test_customer_store_requires_authentication()
     {
-        //
+        $response = $this->post('/api/customers', []);
+
+        $response->assertStatus(401);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function test_customer_store_allows_authenticated_user()
     {
-        //
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $response = $this->post('/api/customers', []);
+
+        $response->assertStatus(201);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function test_customer_store_denies_unauthorized_user()
     {
-        //
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post('/api/customers', []);
+
+        $response->assertStatus(403);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-    public function index()
-    {
-    $this->authorize('viewAny', Customer::class);
-
-    $customers = Customer::all();
-
-    return response()->json($customers);
-    }
-
-    public function store(Request $request)
-    { 
-    $this->authorize('create', Customer::class);
-
-    $customer = Customer::create($request->all());
-
-    return response()->json($customer, 201);
-    }
-
-    public function show(Customer $customer)
-    {
-    $this->authorize('view', $customer);
-
-    return response()->json($customer);
-    }
-
-    public function update(Request $request, Customer $customer)
-    {
-    $this->authorize('update', $customer);
-
-    $customer->update($request->all());
-
-    return response()->json($customer);
-    }
-
-    public function destroy(Customer $customer)
-    {
-    $this->authorize('delete', $customer);
-
-    $customer->delete();
-
-    return response()->json(null, 204);
-    }
+    // dodaj testy dla innych endpointów
 
 }
+
